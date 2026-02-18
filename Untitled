@@ -1,0 +1,44 @@
+\section{Die Werkzeugkiste des Agenten}
+
+Ein Agent ist nur so gut wie die Werkzeuge, auf die er zugreifen kann. Moderne Systeme binden dafür eine ganze Reihe von Tools ein, mit denen sich typische Arbeitsschritte in der Softwareentwicklung abdecken lassen.
+
+\begin{itemize}
+  \item \textbf{Code-Ausführung} ermöglicht es, Python, JavaScript oder andere Sprachen direkt auszuführen.
+  \item \textbf{Dateioperationen} erlauben das Lesen, Schreiben und Durchsuchen von Dateien.
+  \item \textbf{Webrecherche} dient dazu, aktuelle Informationen aus dem Internet abzurufen.
+  \item \textbf{Versionskontrolle} umfasst das Ausführen von Git-Befehlen und das Committen von Änderungen.
+  \item \textbf{Test-Frameworks} starten automatisierte Tests und liefern auswertbare Ergebnisse.
+  \item \textbf{APIs} stellen die Kommunikation mit externen Diensten her.
+\end{itemize}
+
+Charakteristisch ist dabei, dass der Agent selbst auswählt, welches Werkzeug in welcher Situation sinnvoll ist. Er muss dafür nicht Schritt für Schritt programmiert werden, sondern orientiert sich am Kontext der Aufgabe und an den Beschreibungen der verfügbaren Werkzeuge. Technisch stützt sich diese dynamische Werkzeugnutzung häufig auf \emph{Function Calling}~\cite{schick2023toolformer}. Dabei erzeugt das Sprachmodell strukturierte Ausgaben, die sich als Funktionsaufrufe interpretieren und ausführen lassen.
+
+\subsection{Werkzeug-Schnittstellen im Detail}
+
+Damit ein Agent ein Werkzeug zuverlässig nutzen kann, wird es in einem standardisierten Schema beschrieben. Tabelle~\ref{tab:tools} zeigt exemplarisch, wie typische Entwicklerwerkzeuge so aufbereitet werden, dass ein Agent sie ansteuern kann.
+
+\begin{table}[ht]
+\centering
+\footnotesize
+\begin{tabular}{@{}lp{1.5cm}p{2cm}@{}}
+\toprule
+\textbf{Tool} & \textbf{Input} & \textbf{Output} \\
+\midrule
+run\_tests & Modul & Testergebnis \\
+read\_file & Pfad & Dateiinhalt \\
+search & Begriff & Codestellen \\
+exec\_cmd & Befehl & Ausgabe \\
+create\_file & Pfad+Inhalt & OK/Fehler \\
+\bottomrule
+\end{tabular}
+\caption{Typische Agenten-Werkzeuge}
+\label{tab:tools}
+\end{table}
+
+Durch diese Standardisierung lassen sich neue Werkzeuge vergleichsweise einfach ergänzen. Der Agent kann sie dann anhand ihrer Beschreibung einordnen und in seine Arbeitsabläufe integrieren, ohne dass für jedes Tool eine eigene, fest verdrahtete Logik erforderlich ist.
+
+\subsection{Wie entscheidet der Agent?}
+
+Die Auswahl passender Werkzeuge gehört zu den zentralen Fähigkeiten eines Agenten. Vereinfacht lässt sich der Ablauf als Folge mehrerer Schritte beschreiben: Zunächst analysiert der Agent die aktuelle Aufgabe und leitet daraus ab, welche Werkzeuge grundsätzlich in Frage kommen. Anschließend bewertet er für die jeweiligen Optionen, wie hoch die Chance ist, damit einen sinnvollen Fortschritt zu erzielen, und ruft schließlich das Werkzeug auf, das am vielversprechendsten erscheint. Das Resultat wird danach wieder in den nächsten Entscheidungsschritt übernommen.
+
+In der Praxis plant ein Agent dabei oft ganze Werkzeugketten. Er könnte etwa zunächst nach der relevanten Datei suchen, sie anschließend öffnen, den Fehler analysieren und erst danach eine Korrektur schreiben. Gerade diese vorausschauende Planung unterscheidet leistungsfähige Agenten von einfacheren Systemen, die lediglich reaktiv auf einzelne Anfragen antworten.
